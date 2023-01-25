@@ -3352,7 +3352,7 @@ How are multiple conditions used in a Choice router to route events?
 
 **Answer**:
 C. To find the FIRST true condition, then distribute the event to the ONE matched route.
-
+99
 **Description**
 Choice router in Mule is used to route events based on a set of conditions. A Choice router uses the when element to define conditions, and the otherwise element to define a default route. When an event is processed by the Choice router, it evaluates each when element's condition in order. When the first true condition is found, the router routes the event to the corresponding route. Only one route is executed even if multiple conditions are true.
 For example, you can use a Choice router to check the payload of an incoming event and route it to different routes based on the payload's value. For example, you could use a Choice router to route different types of orders to different systems.
@@ -3408,7 +3408,7 @@ It's worth noting that the Choice router can be nested inside other routers, thi
 
 In summary, the Choice router is a powerful tool for routing events in Mule based on multiple conditions. It allows developers to define different routes for different types of events, which can help to keep integration flows simple and easy to understand. By using examples like the ones above, we have shown how to use the Choice router to evaluate multiple conditions and route events to the corresponding routes.
 
-## Question 37
+### 39 Understanding Design Center and its limitations 
 
 What asset can NOT be created by using Design Center?
 
@@ -3813,7 +3813,7 @@ It is important to note that when using the on-error-continue or on-error-propag
 
 In conclusion, understanding the default error handling behavior of batch jobs in MuleSoft is essential for properly managing and processing large amounts of data. While the default behavior is to stop processing the batch job upon encountering an error, there are ways to customize the error handling behavior to suit the specific needs of your use case. It is important to carefully consider the pros and cons of different error handling options and implement them in a way that ensures the integrity and reliability of your data. As a Mulesoft developer, it is important to have a good understanding of batch jobs and error handling, as well as the ability to debug and troubleshoot issues that may arise. Additionally, to use batch jobs, one needs to have a valid Mulesoft Enterprise license.
 
-## Question 45
+## 48 Understanding the Runtime Manager
 
 How does Runtime Manager Console connect with App Data and Logs of a Mule app?
 
@@ -3826,7 +3826,68 @@ How does Runtime Manager Console connect with App Data and Logs of a Mule app?
 D. Rest API
 
 **Description**
-The Runtime Manager Console connects to the App Data and Logs of a Mule app through CloudHub Workers. CloudHub is MuleSoft's fully managed, multi-cloud platform for deploying and running Mule applications. The Runtime Manager Console allows users to view, manage, and monitor the Mule applications deployed on CloudHub. Through the console, users can access the App Data and Logs of a Mule app by selecting the app and viewing the relevant information. This information can be used to troubleshoot any issues with the app and monitor its performance. The other options (A,B,C) are incorrect because they do not provide a way for the Runtime Manager Console to access the App Data and Logs of a Mule app.
+Mulesoft development is a powerful tool for creating and managing integration apps, but understanding how to access and analyze the data and logs of these apps can be a challenge. The Runtime Manager Console is a key tool for connecting the dots and gaining insights into the performance and behavior of Mule apps.
+
+The Runtime Manager Console allows developers to access the data and logs of their Mule apps in real-time, providing valuable information about the performance and behavior of the app. For example, developers can use the Runtime Manager Console to view the number of requests and responses processed by the app, as well as the response time for each request. They can also view the number of errors and exceptions that have occurred within the app, which can help identify and troubleshoot issues.
+
+In addition to providing access to data and logs, the Runtime Manager Console also allows developers to perform various actions on their Mule apps. For example, developers can start and stop their apps, as well as deploy new versions of the app. They can also view the configuration of the app, including properties and environment variables, and make changes as needed.
+
+One of the key benefits of using the Runtime Manager Console is that it allows developers to troubleshoot and optimize their Mule apps in real-time. For example, if a developer notices that their app is experiencing a high number of errors or slow response times, they can use the Runtime Manager Console to view the data and logs and identify the cause of the issue. Once the issue has been identified, the developer can take steps to address it, such as modifying the app's configuration or adding additional error handling logic.
+
+As a Mulesoft developer, it's essential to have knowledge of Runtime Manager Console and how it connects to the app data and logs of a Mule app. This knowledge will help you to optimize the performance and behavior of your apps, troubleshoot issues, and gain valuable insights into the app's behavior. Furthermore, you can also explore more about this topic by reading the official documentation of Mulesoft, or by taking advanced courses on Mulesoft and API development.
+
+Another useful feature of the Runtime Manager Console is the ability to create custom alerts. Developers can set up alerts based on various conditions, such as the number of errors or the response time of the app. When an alert is triggered, the developer will be notified, allowing them to quickly address any issues.
+
+Additionally, the Runtime Manager Console also provides access to CloudHub workers, which are the underlying resources that run Mule apps. Developers can view the status and performance of their CloudHub workers and make adjustments as needed. For example, if a developer notices that their app is experiencing a high load, they can use the Runtime Manager Console to scale up their CloudHub workers to handle the increased load.
+
+As the Runtime Manager Console plays a crucial role in Mulesoft development through providing developers with the ability to access and analyze the data and logs of their Mule apps in real-time, and allowing them to perform various actions on their apps, troubleshoot and optimize their performance and behavior, gain valuable insights into the app's behavior, create custom alerts and access CloudHub workers, you as a Mulesoft developer, should have the capacity to have a solid understanding of the Runtime Manager Console in order to effectively design, build, and manage your Mule apps.
+
+Before answering the question, let us take this opportunity to speak about accessing the Runtime Manager Console.
+
+Accessing the Runtime Manager Console is relatively straightforward and can be done through the Mulesoft Anypoint Platform. To access it, you will need to have a valid Anypoint Platform account and be logged in. Once logged in, you can access the Runtime Manager Console by clicking on the "Runtime Manager" option in the main navigation menu.
+
+Developers typically access the Runtime Manager Console to view the performance and behavior of their Mule apps, troubleshoot issues, and make changes to the configuration of their apps. They can also use it to deploy new versions of their apps, access CloudHub workers, and create custom alerts to be notified when certain conditions are met.
+
+The frequency with which developers access the Runtime Manager Console can vary depending on the specific use case and the needs of the project. Some developers may find themselves accessing it on a daily basis to monitor the performance of their apps and troubleshoot any issues that arise. Others may only access it occasionally, when deploying new versions of their apps or making changes to the configuration.
+
+In general, the more critical the app is, the more frequently developers will access the Runtime Manager Console to monitor and troubleshoot it. For example, an app that is running in a production environment and handling a large amount of traffic will likely require more frequent monitoring than an app that is running in a development or testing environment.
+
+Overall, the Runtime Manager Console is a valuable tool for Mulesoft developers, and understanding how to access and use it can be crucial for effectively managing and optimizing the performance and behavior of your Mule apps.
+
+Now let us look into the question, before answering it, I need to understand what is App Data and Logs for a Mule App.
+
+The App Data and Logs of a Mule app represent various types of information related to the performance and behavior of the app.
+
+App Data refers to the data that is processed by the Mule app, such as incoming and outgoing messages, payloads, and any other data that is used or created by the app. This data can be used to gain insights into the behavior of the app, such as the types of data it is processing and how it is transforming that data.
+
+An example of App Data:
+
+- Incoming and outgoing messages from an external system, such as a database or web service.
+- Data that is transformed or processed by the app, such as converting a CSV file to JSON.
+- Data stored in a cache or temporary storage, such as a session variable.
+
+Logs refer to the information that is generated by the Mule app as it runs, such as error messages, performance metrics, and diagnostic information. These logs can be used to troubleshoot issues and gain insights into the performance and behavior of the app. For example, if a developer notices that their app is experiencing a high number of errors, they can view the logs to identify the cause of the issue and take steps to address it.
+
+An example of Logs: 
+- Error messages and stack traces, which can be used to identify and troubleshoot issues with the app.
+- Performance metrics, such as the number of requests processed per second or the response time of the app.
+- Information about the environment and configuration of the app, such as the version of Mule runtime or the properties set in the app's configuration file.
+- Debugging information, such as the values of variables at specific points in the code.
+
+
+By having access to this data, developers can gain a better understanding of how their app is behaving and what kind of data it is processing. They can use this information to troubleshoot issues, optimize the performance of the app, and make necessary changes to the app's configuration or logic.
+
+It's worth mentioning that these logs can be sent to a centralized logging service (e.g. Elasticsearch, Logstash, Kibana, Splunk) for further analysis and visualization.
+
+The Runtime Manager Console connects to the App Data and Logs of a Mule app through a REST API. The REST API allows the Runtime Manager Console to communicate with the Mule app and retrieve data and log information in a structured format, such as JSON or XML.
+
+When a developer logs into the Runtime Manager Console, they can see a list of their deployed apps. By selecting an app, they can access the app's dashboard which displays various metrics such as the number of requests and responses processed by the app, the response time for each request, and the number of errors and exceptions that have occurred within the app. This data is retrieved through the REST API.
+
+The REST API allows the Runtime Manager Console to not only retrieve data and log information but also to perform actions on the Mule app. For example, developers can use the REST API to start and stop their apps, as well as deploy new versions of the app. They can also view the configuration of the app, including properties and environment variables, and make changes as needed.
+
+Additionally, the REST API allows developers to access CloudHub workers which are the underlying resources that run Mule apps. Developers can view the status and performance of their CloudHub workers, and make adjustments as needed. For example, if a developer notices that their app is experiencing a high load, they can use the Runtime Manager Console to scale up their CloudHub workers to handle the increased load.
+
+In summary, the Runtime Manager Console connects to the App Data and Logs of a Mule app through a REST API. The API allows the Console to retrieve data and log information in a structured format, perform actions on the app and access CloudHub workers. This information can then be used to troubleshoot issues, optimize the performance of the app and make necessary changes.
 
 ## Question 46
 
