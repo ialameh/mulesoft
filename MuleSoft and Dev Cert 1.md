@@ -4108,7 +4108,7 @@ The response returned from the request to the getTemp flow's HTTP listener will 
 
 It looks like the updateTemp flow is storing the payload in the object store for a key named temp and the getTemp flow is designed to retrieve the last value stored in the object store for that key and returning it in a JSON format with the key "temp" and value "85".
 
-## Question
+## 55 Proper URI parameterization techniques 
 
 What is the correct syntax to add a customer ID as a URI parameter in an HTTP Listener's path attribute? 
 
@@ -4123,29 +4123,94 @@ B. {customerID}
 
 **Description**
 
-The correct syntax to add a customer ID as a URI parameter in an HTTP Listener's path attribute when the path is "/accounts/" depends on the version of Mule you are using.
+As a Mulesoft developer, you may find yourself working with HTTP Listener frequently. One important aspect of HTTP Listener is the ability to use URI parameters in the path attribute. URI parameters are used to provide additional information to the server, allowing it to respond with more specific data.
 
-In Mule 4.x, you can use the curly brace notation ({}) to define a URI parameter in the path attribute. For example:
+When using URI parameters in an HTTP Listener's path attribute, it is important to follow best practices to ensure a user-friendly and efficient API. In this article, we will discuss these best practices and provide examples to help you implement them in your own projects.
+
+The first thing to keep in mind is the syntax for including URI parameters in the path attribute. The correct syntax is to enclose the parameter in curly braces {}. For example, the path attribute for a customer endpoint might look like this: /customer/{customerID}.
+
+It's important to use snake_case format for parameter name, for example customer_id, customer_name etc.
+
+Next, it is important to validate the input of the URI parameters. This can be done by using a validation library or by writing custom validation code. It's also a good idea to include error handling code to respond to invalid input.
+
+Another technique is to use optional parameters. This can be done by including a question mark (?) at the end of the parameter name. For example, the path attribute for a customer endpoint might look like this: ```/customer/{customerID?}```. This way, if the `customerID` is not present in the URI, the server can respond with a default value or a list of all customers.
+
+It's also important to use a consistent naming convention for your URI parameters. This makes it easier for developers to understand the structure of the API and for users to predict the format of the URLs.
+
+When working with URI parameters, it's important to keep in mind that they should only be used for resources that are specific to the individual user. For example, a customer's name or address would be appropriate to include as a URI parameter, but general information such as the current time or a list of all customers would not.
+
+Here's an example of how you can implement URI parameters in your HTTP Listener configuration:
 
 ```
-<http:listener path="/accounts/{customerID}/" ... />
+<http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration">
+    <http:listener-connection host="0.0.0.0" port="8081" doc:name="HTTP"/>
+    <http:listener-path path="/customer/{customerID}" doc:name="HTTP"/>
+    <http:request-config name="HTTP_Request_Configuration" protocol="HTTPS" doc:name="HTTP Request Configuration"/>
+</http:listener-config>
+```
+In this example, the path attribute includes a URI parameter called ```"customerID"``` which is enclosed in curly braces {}. This parameter can be accessed in the Mule flow to perform specific actions based on the value of the parameter.
+
+there are other ways to include URI parameters in an HTTP Listener's path attribute.
+
+One way is to use regular expressions to define the format of the URI parameter. This allows for more flexibility in the input format, but it also requires more complex validation and error handling code.
+
+```
+<http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration">
+    <http:listener-connection host="0.0.0.0" port="8081" doc:name="HTTP"/>
+    <http:listener-path path="/customer/{customerID: [a-zA-Z0-9]{5,10}}" doc:name="HTTP"/>
+    <http:request-config name="HTTP_Request_Configuration" protocol="HTTPS" doc:name="HTTP Request Configuration"/>
+</http:listener-config>
 ```
 
-This will tell the HTTP Listener to listen for requests on the /accounts/{customerID}/ path, where {customerID} is a URI parameter that can be any value.
+In this example, the path attribute includes a URI parameter called "customerID" which is defined by a regular expression. The regular expression specifies that the customerID must be between 5 and 10 characters long and can only contain letters and numbers.
 
-In Mule 3.x, you can use the colon notation (:) to define a URI parameter in the path attribute. For example:
+Another way is to include URI parameters in the query string of the URL. This method is useful when the parameter is optional or when there are multiple parameters that need to be passed to the server. However, it can make the URLs longer and more complex, and it may not be as user-friendly as using URI parameters in the path attribute.
 
 ```
-<http:listener path="/accounts/:customerID/" ... />
+<http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration">
+    <http:listener-connection host="0.0.0.0" port="8081" doc:name="HTTP"/>
+    <http:listener-path path="/customer" doc:name="HTTP"/>
+    <http:request-config name="HTTP_Request_Configuration" protocol="HTTPS" doc:name="HTTP Request Configuration"/>
+</http:listener-config>
+
 ```
 
-This will tell the HTTP Listener to listen for requests on the /accounts/:customerId/ path, where :customerId is a URI parameter that can be any value.
+In this example, the path attribute does not include any URI parameters, but the query string of the URL includes a parameter called "customerID". The query string might look like this: `/customer?customerID=12345
+In this example, the customerID is passed as a query parameter in the URL rather than as part of the path attribute.
 
-It's important to note that the examples provided are just a way to include a customer ID as a URI parameter in the path attribute. The structure of the path depends on the design of your application and you need to make sure that the path match your requirements.
+It is also possible to use a combination of both approaches, by including some parameters in the path and others in the query string.
 
+```
+<http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration">
+    <http:listener-connection host="0.0.0.0" port="8081" doc:name="HTTP"/>
+    <http:listener-path path="/customer/{customerID}" doc:name="HTTP"/>
+    <http:request-config name="HTTP_Request_Configuration" protocol="HTTPS" doc:name="HTTP Request Configuration"/>
+</http:listener-config>
+```
 
+In this example, the path attribute includes a URI parameter called "customerID", but additional optional parameters are passed in the query string. The query string might look like this: /customer/12345?status=active&date=2022-01-01.
 
-## Question
+It's worth noting that these are just a few examples, and the method you choose will depend on the specific requirements of your API. It's important to consider the use case, security, maintainability and scalability when choosing which method to use for including URI parameters
+
+few additional points on best practices for including URI parameters in the HTTP Listener path attribute:
+
+- Be consistent: Choose one method and stick to it throughout the API. This will make it easier for developers to understand and use the API.
+
+- Use semantic URLs: Use meaningful and descriptive names for the URI parameters. This will make the API more self-explanatory and user-friendly.
+
+- Validate input: Make sure to validate the input for the URI parameters. This will prevent errors and security vulnerabilities.
+
+- Document the API: Provide clear and detailed documentation on how to use the URI parameters. This will make it easier for developers to understand and use the API.
+
+- Avoid hard coding: Do not hardcode the URI parameters in the code, instead use the expressions provided by mulesoft to read the parameter from the url.
+
+- Use a framework: Consider using a framework such as RAML or OpenAPI to define and document the API. This will make it easier to maintain and evolve the API over time.
+
+- Monitor and test: Regularly monitor and test the API to ensure that it is working as expected and that the URI parameters are being used correctly.
+
+By following these best practices, developers can ensure that their API is user-friendly, reliable, and secure.
+
+## 56 Accessing values from a Set Variable transformer in DataWeave: A guide for Mule Developers
 
 ![image-20230122034651590](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122034651590.png)
 
@@ -4164,7 +4229,15 @@ D. vars 'customer' 'first'
 
 **Description**
 
-The Set Variable transformer sets the variable "customer" to the value #[{first: "Max", last: "Mule"} ], which is an object with two key-value pairs: "first" with the value "Max" and "last" with the value "Mule" In order to access the value 'Max' from the Mule event, you can use the DataWeave expression vars 'customer' 'first' which access the key 'first' from the 'customer' object.
+As a Mule developer, you may often find yourself needing to access values from a Set Variable transformer in DataWeave. The Set Variable transformer allows you to set the value of a variable, which can be accessed later in your flow using the #[variableName] expression.
+
+Consider the following example, where we set the value of a variable called customer to {first: "Max", last: "Mule"} using the Set Variable transformer:
+
+```
+<set-variable value="#[{first: "Max", last: "Mule"}]" variableName="customer" doc:name="Set customer variable"/>
+```
+
+In order to access the value 'Max' from the Mule event, you can use the DataWeave expression vars 'customer' 'first' which access the key 'first' from the 'customer' object.
 
 The vars key is used to reference variables that are set in the Mule flow
 
