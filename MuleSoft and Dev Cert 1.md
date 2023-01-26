@@ -4243,7 +4243,7 @@ The vars key is used to reference variables that are set in the Mule flow
 
 
 
-## Question
+## 57 Routing with Precision: The Power of Choice Router Expressions
 
 ![image-20230122050212624](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122050212624.png)
 
@@ -4264,13 +4264,69 @@ A DataWeave syntax error
 
 The Choice router in Mule is a message processor that routes a message to one of multiple routes based on the evaluation of an expression. Each route has a When expression that is evaluated against the message payload. If the expression evaluates to true, the message is routed to the associated flow for that route.
 
+the Choice Router allows you to use multiple types of expressions to evaluate the conditions for each route. Here are some common types of expressions that can be used with the Choice Router, along with examples using the latest versions:
+
+DataWeave 2.x: DataWeave is a powerful and concise language that is well suited for data transformation and querying. It allows developers to access and transform the message payload in a readable and efficient way.
+```
+<when expression="#[payload.countryCode = 'FR']">
+    <flow-ref name="domesticShipping" doc:name="Domestic Shipping"/>
+</when>
+```
+MEL (Mule Expression Language): MEL is the default expression language for MuleSoft, and allows you to use simple expressions to evaluate conditions.
+```
+<when expression="#[attributes.http.method == 'POST']">
+    <flow-ref name="processPost" doc:name="Process POST"/>
+</when>
+```
+JavaScript: You can use JavaScript expressions to evaluate conditions in the Choice Router.
+```
+<when expression="#[JavaScript: payload.price > 50]">
+    <flow-ref name="highPriceFlow" doc:name="High Price Flow"/>
+</when>
+```
+Regular Expressions: You can use regular expressions to match patterns in the payload, headers, or variables.
+```
+<when expression="#[payload matches '^[0-9]+$']">
+    <flow-ref name="numericFlow" doc:name="Numeric Flow"/>
+</when>
+```
+It's worth noting that inboundProperties is deprecated and replaced by attributes, so you should use `attributes.http.method` instead of `message.inboundProperties['http.method']`
+
+Also, keep in mind that the choice of expression depends on the specific requirements of the project and the developer's familiarity with the language.
+
+In addition to the expressions mentioned above, you can also use other custom expressions in the Choice Router. These can be written in any language that is supported by Mule, such as Java, Python, Ruby, etc. Using custom expressions can be a great way to add specific functionality to your routing logic that is not provided by the built-in expression languages.
+
+Here's an example of using a Python expression in the Choice Router:
+
+```
+<choice doc:name="Choice Router">
+    <when expression="#[Python: import json; payload = json.loads(payload); payload['price'] > 50]">
+        <flow-ref name="highPriceFlow" doc:name="High Price Flow"/>
+    </when>
+    <otherwise>
+        <flow-ref name="lowPriceFlow" doc:name="Low Price Flow"/>
+    </otherwise>
+</choice>
+```
+In this example, the Python expression uses the json library to parse the payload from a JSON string to a Python dictionary. Then, it checks if the price key has a value greater than 50. If the condition is true, the message will be routed to the highPriceFlow flow, otherwise, it will be routed to the lowPriceFlow flow.
+
+It's important to note that for this example to work, you will need to make sure that the required libraries or dependencies, in this case json, are available in the classpath of your application.
+
+It's also worth noting that this is just one example of how you could use a Python expression in the Choice Router. Depending on your specific requirements, you could use any Python code you like as long as it returns a boolean value.
+
+Please also note that this example is just demonstration, and you may need to adjust the code according to your specific requirements.
+
+It's important to note that when using custom expressions, you will need to make sure that the required libraries or dependencies are available in the classpath of your application.
+
+When evaluating which expression to use with the Choice Router, it's important to consider the complexity of the logic, the developer's familiarity with the language and the project's specific requirements. DataWeave 2.x is a powerful and concise language that is well suited for data transformation and querying, but other expressions such as MEL, JavaScript, regular expressions, and custom expressions can be used depending on the specific needs of the project.
+
 In this question, the When expression for the domesticShipping route is set to '#[payload = 'FR']', which is used for assignment and not comparison. This means that in this case, the DataWeave interpreter will raise a syntax error because the payload is not being compared to the value 'FR' but the payload is being assigned to the value 'FR', so the Mule application will fail at runtime and will not be able to evaluate the expression.
 
 As a result, the logger that comes after the choice router in both flows will not log any result, but instead, the error message will be logged. This is why the answer is B, A DataWeave syntax error. It is important to double check the when expressions and ensure that the correct comparison operator is being used, in this case, it should be '#[payload == 'FR']'.
 
 
 
-## Question
+## Question // review
 
 ![image-20230122050846543](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122050846543.png)
 
