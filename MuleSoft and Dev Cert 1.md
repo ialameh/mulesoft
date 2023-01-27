@@ -4070,7 +4070,7 @@ A web client sends one GET request to the test flow's HTTP Listener, which cause
 
 
 
-![image-20230122032514267](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122032514267.png)
+![image-20230122032514267](photos/image-20230122032514267.png)
 
 
 
@@ -4078,7 +4078,7 @@ A web client sends one GET request to the test flow's HTTP Listener, which cause
 
 
 
-![image-20230122033139019](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122033139019.png)
+![image-20230122033139019](photos/image-20230122033139019.png)
 
 - [ ] A. { "temp": [70, 65, 100, 60, 85]}
 - [ ] B. {"temp" : 100}
@@ -4212,7 +4212,7 @@ By following these best practices, developers can ensure that their API is user-
 
 ## 56 Accessing values from a Set Variable transformer in DataWeave: A guide for Mule Developers
 
-![image-20230122034651590](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122034651590.png)
+![image-20230122034651590](photos/image-20230122034651590.png)
 
 
 
@@ -4245,9 +4245,9 @@ The vars key is used to reference variables that are set in the Mule flow
 
 ## 57 Routing with Precision: The Power of Choice Router Expressions
 
-![image-20230122050212624](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122050212624.png)
+![image-20230122050212624](photos/image-20230122050212624.png)
 
-![image-20230122050244894](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122050244894.png)
+![image-20230122050244894](photos/image-20230122050244894.png)
 
 In the Choice router, the When expression for the domesticShipping route is set to '#[payload = 'FR']'. What is logged after the Choice router completes?
 
@@ -4326,9 +4326,9 @@ As a result, the logger that comes after the choice router in both flows will no
 
 
 
-## Question // review
+## 58 Tracking Progress of a Batch Job with Multiple Accept Expressions
 
-![image-20230122050846543](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122050846543.png)
+![image-20230122050846543](photos/image-20230122050846543.png)
 
 The Batch Job scope contains two Batch Step scopes with different accept expressions. The input payload is passed to the Batch Job scope. After the entire payload is processed by the Batch Job scope, what messages have been logged by the Logger components? 
 
@@ -4407,7 +4407,7 @@ The second log would contain a message with the payload:
 
 
 
-## Question
+## 59 Importing and Calling a Function in a DataWeave Module
 
 A Mule project contains a DataWeave module file WebStore dvA that defines a function named loginUser The module file is located in the projects src/main/resources/libs/dw folder What is correct DataWeave code to import all of the WebStore.dwl file's functions and then call the loginUser function for the login '[cindy.park@example.com](mailto:cindy.park@example.com)'?
 
@@ -4458,9 +4458,9 @@ Then the `loginUser( "cindy.park@example.com" )` statement calls the loginUser f
 
 Option A is incorrect because it attempts to call the loginUser function from the webStore package which does not exist. Option B is incorrect because it uses the wrong syntax for imports and also uses wrong capitalization for WebStore. Option C is incorrect because it imports only the WebStore package and not all the functions defined in it, so it can't call loginUser function.
 
-## Question
+## 60 Analyzing Log Output of a Batch Job with String Array Input
 
-![image-20230122150938081](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122150938081.png)
+![image-20230122150938081](photos/image-20230122150938081.png)
 
 
 
@@ -4548,8 +4548,7 @@ Failed Records: 0
 
 Please note that this is a simple example, and the actual output will depend on the specific requirements of your use case and if any error occurs during the process.
 
-## Question
-
+## 61 Customizing SQL Query Filters with Input Parameters
 How should the WHERE clause be changed to set the city and state values from the configured input parameters?
 
 Query: 
@@ -4583,15 +4582,60 @@ A. WHERE city = :city AND state = :state
 
 **Description**
 
-The WHERE clause in the query should be modified to set the city and state values from the configured input parameters. In this case, the query is using the syntax for named parameters, where a parameter is defined by a colon followed by the parameter name. This syntax allows you to use the same query multiple times with different input values.
+SQL queries can be a powerful tool for extracting data from a database. However, when it comes to filtering data, hard-coding the WHERE clause can lead to inflexible and inelegant code. One solution is to use input parameters for filtering, allowing for a more dynamic and customizable approach to querying data.
 
-In this case, the input parameters are passed in as a JSON object with the keys 'city' and 'state' and the values of these keys are the same as the keys of attributes.queryParams.
+An input parameter is a value that is passed to a SQL query at runtime. It can be used to filter data based on user input or other dynamic conditions. By using input parameters, you can create a single query that can be reused for multiple filtering scenarios, reducing the need for multiple, hard-coded queries.
 
-The other options are not correct, option B is not using the attributes.queryParams, and options C and D are using different syntax to refer to the parameters.
+For example, consider a query that selects all the accounts from a database:
 
-## Question
+Copy code
+SELECT * FROM accounts;
+To filter the data based on the city and state, you would typically include a WHERE clause like this:
 
-![image-20230122155211733](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122155211733.png)
+```
+SELECT * FROM accounts
+WHERE city = 'New York' AND state = 'NY';
+```
+Instead of hard-coding the values for city and state, you can use input parameters to make the query more dynamic:
+
+```
+SELECT * FROM accounts
+WHERE city = :city AND state = :state;
+```
+In this example, the input parameters are represented by the ":city" and ":state" placeholders. These placeholders can be replaced with actual values at runtime, allowing for filtering based on dynamic input.
+
+Here is an example of how to use input parameters in a Mule application:
+
+```
+<db:select config-ref="Database_Config" doc:name="Database">
+    <db:parameterized-query><![CDATA[SELECT * FROM accounts
+                                 WHERE city = :city AND state = :state]]>
+    </db:parameterized-query>
+    <db:input-parameters>
+        <db:input-parameter key="city" value="#[attributes.queryParams.city]" />
+        <db:input-parameter key="state" value="#[attributes.queryParams.state]" />
+    </db:input-parameters>
+</db:select>
+```
+The above code snippet uses the db:select component to execute the SQL query with input parameters. The `db:input-parameters` element is used to specify the key-value pairs for the input parameters. In this example, the input parameters are set to the city and state values from the `attributes.queryParams` object.
+
+When building dynamic SQL queries with input parameters, it's important to be mindful of security concerns. One best practice is to use parameterized queries to prevent SQL injection attacks. This can be done by using placeholders like `":city"` and `":state"` in the query, as shown in the above examples, instead of concatenating user input into the query string.
+
+Another best practice is to validate user input before passing it to the query. This can help prevent malicious users from passing unexpected or malicious values to the query, which could lead to unintended results or security vulnerabilities.
+
+To summarize we can say that, using input parameters in SQL queries can make your code more dynamic and reusable. It also allows for more flexible and customizable filtering of data. Remember to use parameterized queries and validate user input to ensure the security of your application.
+
+Additionally, it's important to consider the performance implications of using input parameters. When a query is executed with different input parameters, the database may need to create a new execution plan, which can be a time-consuming process. To avoid this, you can use prepared statements. Prepared statements are pre-compiled SQL queries that can be executed multiple times with different input parameters. This can result in a significant performance boost, especially when executing the same query multiple times with different input parameters.
+
+Another way to improve performance is by using indexes. An index is a data structure that allows the database to quickly find and retrieve data based on the indexed columns. By creating an index on the columns used in the WHERE clause, the database can quickly find the relevant rows without having to scan the entire table. This can significantly improve the performance of your queries, especially when working with large tables.
+
+In addition to filters, input parameters can also be used for sorting and pagination. Sorting can be achieved by using the ORDER BY clause, and pagination can be achieved by using the LIMIT and OFFSET clauses. For example, you can use input parameters to allow users to sort the data by different columns and to control the number of rows returned by the query.
+
+Finally, when working with input parameters it's important to handle null values properly. NULL is a special value that represents the absence of data. When a query is executed with a null input parameter, it can lead to unexpected results. To avoid this, you can use the IS NULL or IS NOT NULL operators in the WHERE clause, or use the COALESCE() or NULLIF() functions to handle null values.
+
+## 62 Flow Reference: A Novice's Guide to Calling Child Flows in MuleSoft
+
+![image-20230122155211733](photos/image-20230122155211733.png)
 
 The main flow contains a Flow Reference component configured to call the child flow What part(s) of a Mule event passed to the Flow Reference component are available in the child flow? 
 
@@ -4602,23 +4646,80 @@ The main flow contains a Flow Reference component configured to call the child f
 
 **Answer**:
 
-B. The payload and all variables
+C. The entire Mule Event
 
 **Description**
 
-In MuleSoft, when a payload, variable, or attribute is passed through different flows, their behavior can be different depending on the type of component or connector that is used and the scope of the flow.
+ One of the key features of MuleSoft is the ability to create child flows and call them from the main flow using the Flow Reference component. In this article, we will take a closer look at how the Mule event is passed to the child flow when using the Flow Reference component and the best practices for utilizing this feature.
+
+What is the Mule event?
+The Mule event is the core construct in MuleSoft that carries data through the flow. The Mule event consists of the following parts:
 
 - **Payload**: The payload is the primary data being processed by the flow and it is passed through the flow and processed by different components. The payload is passed by reference, meaning that if a component modifies the payload, the change is reflected in the next component.
 - **Variables**: Variables are used to store data within a flow and also passed by reference. They are accessible throughout the entire flow and can be passed to and from subflows or referenced in expressions. The variables are also thread-safe and can be used to store data across multiple threads.
-- **Attributes**: Attributes are additional information about the event such as headers, query parameters, and other metadata. They are also passed by reference, so if a component modifies an attribute, the change is reflected in the next component. However, when a flow-ref component is used to call another flow, the attributes are not passed to the child flow, the child flow starts with a new message and variables.
+- **Attributes**: Attributes are additional information about the event such as headers, query parameters, and other metadata. They are also passed by reference, so if a component modifies an attribute, the change is reflected in the next component. 
+ 
+What is the Flow Reference component?
+The Flow Reference component is a way to call a child flow from the main flow. The component is used to reuse existing flow logic, reducing the amount of duplicated code and improving maintainability.
 
-In summary, when passing through different flows in MuleSoft, the payload and variables are passed by reference, meaning that any modifications made by a component are reflected in the next component and they are accessible throughout the entire flow, while attributes are passed by reference but when a flow-ref component is used to call another flow the attributes are not passed to the child flow.
+How does the Mule event get passed to the child flow?
+When the Flow Reference component is used, the entire Mule event, including the payload, attributes, and variables, is passed to the child flow. This allows the child flow to access and process the same data as the main flow, making it possible to use the data from the main flow in the child flow.
 
-## Question
+Best practices:
 
-![image-20230122164352963](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122164352963.png)
+- Always use the Flow Reference component to call child flows instead of duplicating logic in multiple flows to avoid code redundancy and increase maintainability.
+- Use variables to store values that will be used in multiple flows, as this makes it easier to update the value in one place if needed and improves code readability.
+- Keep in mind that all data that is part of the Mule event is passed to the child flow, so it is important to be mindful of sensitive data and potential security risks.
+- Use the Flow Reference component to call child flows that are located in the same Mule application to ensure data availability and maintain project simplicity.
+- Avoid using the Flow Reference component to call a child flow located in a different Mule application as it can lead to performance issues and make it more difficult to maintain the flow.
+- When creating a child flow, make sure to include all necessary data in the Mule event so that it can be accessed and used in the child flow.
+- Document and structure child flows in a way that makes them easy to understand, so that other developers can easily maintain and update them.
 
-![image-20230122164434840](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122164434840.png)
+Example:
+```
+<flow name="main-flow">
+    <set-payload value="Make" />
+    <set-variable variableName="model" value="renault" />
+    <flow-ref name="child-flow" />
+</flow>
+
+<flow name="child-flow">
+    <logger message="#[payload]" level="INFO" />
+    <logger message="#[variable:model]" level="INFO" />
+</flow>
+
+```
+In this example, we have a main flow that sets the payload to "Make" and a variable called "model" to the value "renault" and then calls the child flow using the Flow Reference component. In the child flow, we are using the payload and variable that was passed from the main flow to log the value.
+
+Availability of Mule Event Data:
+
+- The Mule event is passed to the child flow when using the Flow Reference component. This includes the payload and all attributes, variables, and any other data that is part of the Mule event.
+- The payload is the main data that is passed through the flows in the Mule application, it can be any type of -data (e.g. JSON, XML, String, etc.).
+- Attributes are metadata that is associated with the payload, they can be used to store additional information about the payload (e.g. a timestamp, a correlation ID, etc.).
+- Variables are used to store values that can be used and reused throughout the flow.
+
+Dos:
+
+- Use child flows to modularize your application and make it more organized and maintainable.
+- Use appropriate variable scoping to ensure that the data is being passed correctly.
+- Test your flows thoroughly to ensure that the data is being passed correctly.
+
+Don'ts:
+
+- Don't make changes to the payload, attributes, or variables in the child flow without understanding the impact it will have on the main flow.
+- Don't use the Flow Reference component to call a flow that is not properly designed, as this can cause unexpected errors in the main flow.
+
+Considerations:
+
+- The availability of the Mule event data in the child flow when using the Flow Reference component.
+- The use of variables to store values that will be used in multiple flows.
+- The location of the child flow when using the Flow Reference component (i.e. within the same Mule application or in a different Mule application).
+
+## 63 Configuring the Set Payload Transformer in a Mule Application
+
+![image-20230122164352963](photos/image-20230122164352963.png)
+
+![image-20230122164434840](photos/image-20230122164434840.png)
 
 A Mule application is being developed to process web client POST requests with payloads containing order information including the user name and purchased items The Shipping connector returns a shipping address for the input payloads user name The Shipping connector's Shipping Address operation is configured with a target named shippingAddress. 
 
@@ -5149,7 +5250,7 @@ In the color flow , both the variable named color and payload are set to 'red'. 
 
 
 
-![image-20230122235629271](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230122235629271.png)
+![image-20230122235629271](photos/image-20230122235629271.png)
 
 ```
 <flow name="colorFlow" doc:id="c008245d-af64-41ec-b611-f3d5540709c1">
@@ -5231,7 +5332,7 @@ There are other similar functions like `flattenObject` and `flattenArray` that c
 
 ## Question
 
-![image-20230123150642265](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230123150642265.png)
+![image-20230123150642265](photos/image-20230123150642265.png)
 
 ```
 <flow name="ForEachFlow" doc:id="C21C793d-3928-4132-9512-99d5d3465918">
@@ -5265,11 +5366,11 @@ The variable "count" is set to 1 before the foreach loop, and is incremented by 
 
 As a mulesoft developer, what you would change in Database connector configuration to resolve this error?
 
-![image-20230123151632139](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230123151632139.png)
+![image-20230123151632139](photos/image-20230123151632139.png)
 
 
 
-![image-20230123151658211](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230123151658211.png)
+![image-20230123151658211](photos/image-20230123151658211.png)
 
 - [ ] A . Configure the correct host URL 
 - [ ] B . Configure the correct database name 
@@ -5520,7 +5621,7 @@ It's worth checking the log files and the console outputs of the Anypoint Studio
 
 In the execution of scatter gather, the 'sleep 2 sec' Flow Reference takes about 2 sec to complete, and the 'sleep 8 sec' Flow Reference takes about 8 sec to complete. About how many sec does it take from the Scatter-Gather is called until the 'Set Payload' transformer is called?
 
-![image-20230123230240124](C:\Users\hassa\AppData\Roaming\Typora\typora-user-images\image-20230123230240124.png)
+![image-20230123230240124](photos/image-20230123230240124.png)
 
 - [ ] A . 8 
 - [ ] B . 0 
